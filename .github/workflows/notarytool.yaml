@@ -1,0 +1,26 @@
+name: Extract notarytool
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - name: Run
+      run: |
+        xcode-select --version
+        ls /Applications/Xcode.app/Contents/Developer/usr/bin/
+
+    - name: Zip
+      run: |
+        zip -r notarytool.zip /Applications/Xcode.app/Contents/Developer/usr/bin/notarytool
+
+    - name: Create release
+      uses: softprops/action-gh-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        name: notarytool
+        tag_name: notarytool-latest
+        files: notarytool.zip
